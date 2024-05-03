@@ -1,22 +1,20 @@
-@extends('layouts.adminmaster')
-
-@section('styles')
+<?php $__env->startSection('styles'); ?>
 
 <!-- INTERNAL Data table css -->
-<link href="{{asset('assets/plugins/datatable/css/dataTables.bootstrap5.min.css')}}?v=<?php echo time(); ?>" rel="stylesheet" />
-<link href="{{asset('assets/plugins/datatable/responsive.bootstrap5.css')}}?v=<?php echo time(); ?>" rel="stylesheet" />
+<link href="<?php echo e(asset('assets/plugins/datatable/css/dataTables.bootstrap5.min.css')); ?>?v=<?php echo time(); ?>" rel="stylesheet" />
+<link href="<?php echo e(asset('assets/plugins/datatable/responsive.bootstrap5.css')); ?>?v=<?php echo time(); ?>" rel="stylesheet" />
 
 <!-- INTERNAL Sweet-Alert css -->
-<link href="{{asset('assets/plugins/sweet-alert/sweetalert.css')}}?v=<?php echo time(); ?>" rel="stylesheet" />
+<link href="<?php echo e(asset('assets/plugins/sweet-alert/sweetalert.css')); ?>?v=<?php echo time(); ?>" rel="stylesheet" />
 
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('content')
+<?php $__env->startSection('content'); ?>
 
 <!--Page header-->
 <div class="page-header d-xl-flex d-block">
 	<div class="page-leftheader">
-		<h4 class="page-title"><span class="font-weight-normal text-muted ms-2">{{lang('Category')}}</span></h4>
+		<h4 class="page-title"><span class="font-weight-normal text-muted ms-2"><?php echo e(lang('Category')); ?></span></h4>
 	</div>
 </div>
 <!--End Page header-->
@@ -25,147 +23,148 @@
 <div class="col-xl-12 col-lg-12 col-md-12">
 	<div class="card ">
 		<div class="card-header border-0 d-sm-flex d-block">
-			<h4 class="card-title">{{lang('Category List')}}</h4>
+			<h4 class="card-title"><?php echo e(lang('Category List')); ?></h4>
 			<div class="card-options mt-sm-max-2 d-sm-flex d-block">
-				@can('Category Create')
+				<?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('Category Create')): ?>
 
-				<a href="javascript:void(0)" class="btn btn-secondary me-3 mb-sm-0 mb-2" id="create-new-testimonial">{{lang('Add Category')}}</a>
-				@endcan
+				<a href="javascript:void(0)" class="btn btn-secondary me-3 mb-sm-0 mb-2" id="create-new-testimonial"><?php echo e(lang('Add Category')); ?></a>
+				<?php endif; ?>
 
-				@php $module = Module::all(); @endphp
+				<?php $module = Module::all(); ?>
 
-				@if(in_array('Uhelpupdate', $module))
+				<?php if(in_array('Uhelpupdate', $module)): ?>
 				
-				@endif
+				<?php endif; ?>
 
 			</div>
 		</div>
 		<div class="card-body" >
 			<div class="table-responsive spruko-delete">
-				@can('Category Delete')
+				<?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('Category Delete')): ?>
 
-				<button id="massdelete" class="btn btn-outline-light btn-sm mb-4 data-table-btn"><i class="fe fe-trash"></i> {{lang('Delete')}}</button>
-				@endcan
+				<button id="massdelete" class="btn btn-outline-light btn-sm mb-4 data-table-btn"><i class="fe fe-trash"></i> <?php echo e(lang('Delete')); ?></button>
+				<?php endif; ?>
 				<table class="table table-bordered border-bottom text-nowrap w-100" id="support-category">
 					<thead>
 						<tr>
-							<th >{{lang('Sl.No')}}</th>
-							@can('Category Delete')
+							<th ><?php echo e(lang('Sl.No')); ?></th>
+							<?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('Category Delete')): ?>
 
 							<th width="10" >
 								<input type="checkbox"  id="customCheckAll">
 								<label  for="customCheckAll"></label>
 							</th>
-							@endcan
-							@cannot('Category Delete')
+							<?php endif; ?>
+							<?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->denies('Category Delete')): ?>
 
 							<th width="10" >
 								<input type="checkbox"  id="customCheckAll" disabled>
 								<label  for="customCheckAll"></label>
 							</th>
-							@endcannot
-							<th >{{lang('Category Name')}}</th>
-							<th >{{lang('Ticket/Knowledge')}}</th>
-							<th >{{lang('Assign To Groups')}}</th>
-							<th >{{lang('Assigned Priority')}}</th>
-							<th >{{lang('Status')}}</th>
-							<th >{{lang('Actions')}}</th>
+							<?php endif; ?>
+							<th ><?php echo e(lang('Category Name')); ?></th>
+							<th ><?php echo e(lang('Ticket/Knowledge')); ?></th>
+							<th ><?php echo e(lang('Assign To Groups')); ?></th>
+							<th ><?php echo e(lang('Assigned Priority')); ?></th>
+							<th ><?php echo e(lang('Status')); ?></th>
+							<th ><?php echo e(lang('Actions')); ?></th>
 						</tr>
 					</thead>
 					<tbody>
-						@php $i = 1; @endphp
-						@foreach($categories as $category)
+						<?php $i = 1; ?>
+						<?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
 							<tr>
-								<td>{{$i++}}</td>
+								<td><?php echo e($i++); ?></td>
 								<td>
-									@if(Auth::user()->can('Category Delete'))
-										<input type="checkbox" name="student_checkbox[]" class="checkall" value="{{$category->id}}" />
-									@else
-										<input type="checkbox" name="student_checkbox[]" class="checkall" value="{{$category->id}}" disabled />
-									@endif
+									<?php if(Auth::user()->can('Category Delete')): ?>
+										<input type="checkbox" name="student_checkbox[]" class="checkall" value="<?php echo e($category->id); ?>" />
+									<?php else: ?>
+										<input type="checkbox" name="student_checkbox[]" class="checkall" value="<?php echo e($category->id); ?>" disabled />
+									<?php endif; ?>
 								</td>
-								<td>{{$category->name}}</td>
-								<td>{{$category->display}}</td>
+								<td><?php echo e($category->name); ?></td>
+								<td><?php echo e($category->display); ?></td>
 								<td>
-									@if(Auth::user()->can('Category Assign To Groups'))
+									<?php if(Auth::user()->can('Category Assign To Groups')): ?>
 
-										@if($category->display == 'ticket' || $category->display == 'both')
-											<a href="javascript:void(0)" data-id="{{$category->id}}" id="assigneds" class="badge badge-pill badge-info mt-2" data-bs-toggle="tooltip" data-bs-placement="top" title="{{lang('Assign to group')}}">
-												{{$category->groupscategoryc()->count()}}
+										<?php if($category->display == 'ticket' || $category->display == 'both'): ?>
+											<a href="javascript:void(0)" data-id="<?php echo e($category->id); ?>" id="assigneds" class="badge badge-pill badge-info mt-2" data-bs-toggle="tooltip" data-bs-placement="top" title="<?php echo e(lang('Assign to group')); ?>">
+												<?php echo e($category->groupscategoryc()->count()); ?>
+
 											</a>
-										@endif
+										<?php endif; ?>
 
-									@else
+									<?php else: ?>
 										~
-									@endif
+									<?php endif; ?>
 								</td>
 								<td>
-									@if($category->priority != null)
+									<?php if($category->priority != null): ?>
 
-										@if($category->priority == "Low")
+										<?php if($category->priority == "Low"): ?>
 
-										<span class="badge badge-success-light" >{{$category->priority}}</span>
+										<span class="badge badge-success-light" ><?php echo e($category->priority); ?></span>
 
 
-										@elseif($category->priority == "High")
+										<?php elseif($category->priority == "High"): ?>
 
-										<span class="badge badge-danger-light">{{$category->priority}}</span>
+										<span class="badge badge-danger-light"><?php echo e($category->priority); ?></span>
 
-										@elseif($category->priority == "Critical")
+										<?php elseif($category->priority == "Critical"): ?>
 
-										<span class="badge badge-danger-dark">{{$category->priority}}</span>
+										<span class="badge badge-danger-dark"><?php echo e($category->priority); ?></span>
 
-										@else
+										<?php else: ?>
 
-										<span class="badge badge-warning-light">{{$category->priority}}</span>
+										<span class="badge badge-warning-light"><?php echo e($category->priority); ?></span>
 
-										@endif
+										<?php endif; ?>
 
-									@else
+									<?php else: ?>
 										~
-									@endif
+									<?php endif; ?>
 								</td>
 								<td>
-									@if(Auth::user()->can('Category Edit'))
-										@if($category->status == '1')
+									<?php if(Auth::user()->can('Category Edit')): ?>
+										<?php if($category->status == '1'): ?>
 											<label class="custom-switch form-switch mb-0">
-												<input type="checkbox" name="status" data-id="{{$category->id}}" id="myonoffswitch{{$category->id}}" value="1" class="custom-switch-input tswitch" checked>
+												<input type="checkbox" name="status" data-id="<?php echo e($category->id); ?>" id="myonoffswitch<?php echo e($category->id); ?>" value="1" class="custom-switch-input tswitch" checked>
 												<span class="custom-switch-indicator"></span>
 											</label>
-										@else
+										<?php else: ?>
 											<label class="custom-switch form-switch mb-0">
-												<input type="checkbox" name="status" data-id="{{$category->id}}" id="myonoffswitch{{$category->id}}" value="1" class="custom-switch-input tswitch">
+												<input type="checkbox" name="status" data-id="<?php echo e($category->id); ?>" id="myonoffswitch<?php echo e($category->id); ?>" value="1" class="custom-switch-input tswitch">
 												<span class="custom-switch-indicator"></span>
 											</label>
-										@endif
-									@else
+										<?php endif; ?>
+									<?php else: ?>
 										~
-									@endif
+									<?php endif; ?>
 								</td>
 								<td>
 									<div class = "d-flex">
-									@if(Auth::user()->can('Category Edit'))
+									<?php if(Auth::user()->can('Category Edit')): ?>
 
-										<a href="javascript:void(0)" data-id="{{$category->id}}" class="action-btns1 edit-testimonial">
-											<i class="feather feather-edit text-primary" data-id="{{$category->id}}"data-bs-toggle="tooltip" data-bs-placement="top" title="{{lang('Edit')}}"></i>
+										<a href="javascript:void(0)" data-id="<?php echo e($category->id); ?>" class="action-btns1 edit-testimonial">
+											<i class="feather feather-edit text-primary" data-id="<?php echo e($category->id); ?>"data-bs-toggle="tooltip" data-bs-placement="top" title="<?php echo e(lang('Edit')); ?>"></i>
 										</a>
 
-									@else
+									<?php else: ?>
 										~
-									@endif
-									@if(Auth::user()->can('Category Delete'))
+									<?php endif; ?>
+									<?php if(Auth::user()->can('Category Delete')): ?>
 
-										<a href="javascript:void(0)" data-id="{{$category->id}}" class="action-btns1 delete-category">
-											<i class="feather feather-trash-2 text-danger" data-id="{{$category->id}}"data-bs-toggle="tooltip" data-bs-placement="top" title="{{lang('Delete')}}"></i>
+										<a href="javascript:void(0)" data-id="<?php echo e($category->id); ?>" class="action-btns1 delete-category">
+											<i class="feather feather-trash-2 text-danger" data-id="<?php echo e($category->id); ?>"data-bs-toggle="tooltip" data-bs-placement="top" title="<?php echo e(lang('Delete')); ?>"></i>
 										</a>
 
-									@else
+									<?php else: ?>
 										~
-									@endif
+									<?php endif; ?>
 									</div>
 								</td>
 							</tr>
-						@endforeach
+						<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 					</tbody>
 				</table>
 			</div>
@@ -175,28 +174,28 @@
 </div>
 <!-- List Category List -->
 
-@endsection
+<?php $__env->stopSection(); ?>
 
 
-@section('scripts')
+<?php $__env->startSection('scripts'); ?>
 
 <!-- INTERNAL Vertical-scroll js-->
-<script src="{{asset('assets/plugins/vertical-scroll/jquery.bootstrap.newsbox.js')}}?v=<?php echo time(); ?>"></script>
+<script src="<?php echo e(asset('assets/plugins/vertical-scroll/jquery.bootstrap.newsbox.js')); ?>?v=<?php echo time(); ?>"></script>
 
 <!-- INTERNAL Data tables -->
-<script src="{{asset('assets/plugins/datatable/js/jquery.dataTables.min.js')}}?v=<?php echo time(); ?>"></script>
-<script src="{{asset('assets/plugins/datatable/js/dataTables.bootstrap5.js')}}?v=<?php echo time(); ?>"></script>
-<script src="{{asset('assets/plugins/datatable/dataTables.responsive.min.js')}}?v=<?php echo time(); ?>"></script>
-<script src="{{asset('assets/plugins/datatable/responsive.bootstrap5.min.js')}}?v=<?php echo time(); ?>"></script>
+<script src="<?php echo e(asset('assets/plugins/datatable/js/jquery.dataTables.min.js')); ?>?v=<?php echo time(); ?>"></script>
+<script src="<?php echo e(asset('assets/plugins/datatable/js/dataTables.bootstrap5.js')); ?>?v=<?php echo time(); ?>"></script>
+<script src="<?php echo e(asset('assets/plugins/datatable/dataTables.responsive.min.js')); ?>?v=<?php echo time(); ?>"></script>
+<script src="<?php echo e(asset('assets/plugins/datatable/responsive.bootstrap5.min.js')); ?>?v=<?php echo time(); ?>"></script>
 
 <!-- INTERNAL Index js-->
-<script src="{{asset('assets/js/support/support-sidemenu.js')}}?v=<?php echo time(); ?>"></script>
+<script src="<?php echo e(asset('assets/js/support/support-sidemenu.js')); ?>?v=<?php echo time(); ?>"></script>
 
 <!--File BROWSER -->
-<script src="{{asset('assets/js/form-browser.js')}}?v=<?php echo time(); ?>"></script>
+<script src="<?php echo e(asset('assets/js/form-browser.js')); ?>?v=<?php echo time(); ?>"></script>
 
 <!-- INTERNAL Sweet-Alert js-->
-<script src="{{asset('assets/plugins/sweet-alert/sweetalert.min.js')}}?v=<?php echo time(); ?>"></script>
+<script src="<?php echo e(asset('assets/plugins/sweet-alert/sweetalert.min.js')); ?>?v=<?php echo time(); ?>"></script>
 
 <script type="text/javascript">
 
@@ -205,7 +204,7 @@
 	(function($)  {
 
 		// Variables
-		var SITEURL = '{{url('')}}';
+		var SITEURL = '<?php echo e(url('')); ?>';
 
 		// select2 js
 		$('.select2').select2({
@@ -234,17 +233,17 @@
 
 		// });
 
-		let prev = {!! json_encode(lang("Previous")) !!};
-		let next = {!! json_encode(lang("Next")) !!};
-		let nodata = {!! json_encode(lang("No data available in table")) !!};
-		let noentries = {!! json_encode(lang("No entries to show")) !!};
-		let showing = {!! json_encode(lang("showing page")) !!};
-		let ofval = {!! json_encode(lang("of")) !!};
-		let maxRecordfilter = {!! json_encode(lang("- filtered from ")) !!};
-		let maxRecords = {!! json_encode(lang("records")) !!};
-		let entries = {!! json_encode(lang("entries")) !!};
-		let show = {!! json_encode(lang("Show")) !!};
-		let search = {!! json_encode(lang("Search...")) !!};
+		let prev = <?php echo json_encode(lang("Previous")); ?>;
+		let next = <?php echo json_encode(lang("Next")); ?>;
+		let nodata = <?php echo json_encode(lang("No data available in table")); ?>;
+		let noentries = <?php echo json_encode(lang("No entries to show")); ?>;
+		let showing = <?php echo json_encode(lang("showing page")); ?>;
+		let ofval = <?php echo json_encode(lang("of")); ?>;
+		let maxRecordfilter = <?php echo json_encode(lang("- filtered from ")); ?>;
+		let maxRecords = <?php echo json_encode(lang("records")); ?>;
+		let entries = <?php echo json_encode(lang("entries")); ?>;
+		let show = <?php echo json_encode(lang("Show")); ?>;
+		let search = <?php echo json_encode(lang("Search...")); ?>;
 		// Datatable
 		$('#support-category').dataTable({
 			language: {
@@ -272,7 +271,7 @@
 			$('#btnsave').val("create-product");
 			$('#testimonial_id').val('');
 			$('#testimonial_form').trigger("reset");
-			$('.modal-title').html("{{lang('Add New Category')}}");
+			$('.modal-title').html("<?php echo e(lang('Add New Category')); ?>");
 
 			$.post('category/all', function(data){
 				$('.categorysub').html(data);
@@ -311,7 +310,7 @@
 				$('#nameError').html('');
 				$('#displayError').html('');
 				$('#priorityError').html('');
-				$('.modal-title').html("{{lang('Edit Category')}}");
+				$('.modal-title').html("<?php echo e(lang('Edit Category')); ?>");
 				$('#btnsave').val("edit-testimonial");
 				$('#addtestimonial').modal('show');
 				$('#testimonial_id').val(data.post.id);
@@ -375,8 +374,8 @@
 		$('body').on('click', '.delete-category', function () {
 			var _id = $(this).data("id");
 				swal({
-					title: `{{lang('Are you sure you want to continue?', 'alerts')}}`,
-					text: "{{lang('This might erase your records permanently', 'alerts')}}",
+					title: `<?php echo e(lang('Are you sure you want to continue?', 'alerts')); ?>`,
+					text: "<?php echo e(lang('This might erase your records permanently', 'alerts')); ?>",
 					icon: "warning",
 					buttons: true,
 					dangerMode: true,
@@ -428,7 +427,7 @@
 			$.get('groupassigned/' + assigned_group , function (data) {
 				$('#category_id').val(data.assign_data.id);
 				$('#category_name').val(data.assign_data.name);
-				$(".modal-title").text('{{lang('Assign To Groups')}}');
+				$(".modal-title").text('<?php echo e(lang('Assign To Groups')); ?>');
 				$('#groupname').html('');
 				$('#groupname').html(data.table_data);
 				$('#addassigneds').modal('show');
@@ -460,7 +459,7 @@
 						$('#displayError').html('');
 						$('#nameError').html(data.errors.name);
 						$('#displayError').html(data.errors.display);
-						$('#btnsave').html('{{lang('Save Changes')}}');
+						$('#btnsave').html('<?php echo e(lang('Save Changes')); ?>');
 
 					}
 					if(data.success)
@@ -469,7 +468,7 @@
 						$('#displayError').html('');
 						$('#testimonial_form').trigger("reset");
 						$('#addtestimonial').modal('hide');
-						$('#btnsave').html('{{lang('Save Changes')}}');
+						$('#btnsave').html('<?php echo e(lang('Save Changes')); ?>');
 						toastr.success(data.success);
 						location.reload();
 					}
@@ -477,8 +476,8 @@
 				},
 				error: function(data){
 					console.log(data);
-					toastr.error('{{lang('Category name already exists', 'alerts')}}');
-					$('#btnsave').html('{{lang('Save Changes')}}');
+					toastr.error('<?php echo e(lang('Category name already exists', 'alerts')); ?>');
+					$('#btnsave').html('<?php echo e(lang('Save Changes')); ?>');
 				}
 			});
 		});
@@ -505,13 +504,13 @@
 				success: (data) => {
 					$('#group_form').trigger("reset");
 					$('#addassigneds').modal('hide');
-					$('#btngroup').html('{{lang('Save Changes')}}');
+					$('#btngroup').html('<?php echo e(lang('Save Changes')); ?>');
 					toastr.success(data.success);
 					window.location.reload();
 				},
 				error: function(data){
 					console.log('Error:', data);
-					$('#btnsave').html('{{lang('Save Changes')}}');
+					$('#btnsave').html('<?php echo e(lang('Save Changes')); ?>');
 				}
 			});
 		});
@@ -525,8 +524,8 @@
 			});
 			if(id.length > 0){
 				swal({
-					title: `{{lang('Are you sure you want to continue?', 'alerts')}}`,
-					text: "{{lang('This might erase your records permanently', 'alerts')}}",
+					title: `<?php echo e(lang('Are you sure you want to continue?', 'alerts')); ?>`,
+					text: "<?php echo e(lang('This might erase your records permanently', 'alerts')); ?>",
 					icon: "warning",
 					buttons: true,
 					dangerMode: true,
@@ -534,7 +533,7 @@
 				.then((willDelete) => {
 					if (willDelete) {
 						$.ajax({
-							url:"{{ route('category.deleteall')}}",
+							url:"<?php echo e(route('category.deleteall')); ?>",
 							method:"GET",
 							data:{id:id},
 							success:function(data)
@@ -550,7 +549,7 @@
 					}
 				});
 			}else{
-				toastr.error('{{lang('Please select at least one check box.', 'alerts')}}');
+				toastr.error('<?php echo e(lang('Please select at least one check box.', 'alerts')); ?>');
 			}
 		});
 
@@ -576,12 +575,14 @@
 	})(jQuery);
 </script>
 
-@endsection
+<?php $__env->stopSection(); ?>
 
 
-@section('modal')
+<?php $__env->startSection('modal'); ?>
 
-@include('admin.category.modal')
-		@include('admin.category.groupmodal')
-@endsection
+<?php echo $__env->make('admin.category.modal', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+		<?php echo $__env->make('admin.category.groupmodal', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+<?php $__env->stopSection(); ?>
 
+
+<?php echo $__env->make('layouts.adminmaster', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\xampp\htdocs\cms-kit\resources\views/admin/category/index.blade.php ENDPATH**/ ?>

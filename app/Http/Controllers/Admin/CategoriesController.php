@@ -80,61 +80,59 @@ class CategoriesController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'display' => 'required|in:both,ticket,knowledge',
+        try {
+            // Validate the incoming request data
+            $validator = Validator::make($request->all(), [
+                'name' => 'required|string|max:255',
+                'display' => 'required|in:both,ticket,knowledge',
+            ]);
 
-        ]);
+            if ($validator->fails()) {
+                // Return validation errors
+                return response()->json(['errors' => $validator->errors()], 422);
+            }
 
-        if($validator->passes()){
-
-
+            // Retrieve the testimonial ID from the request
             $testiId = $request->testimonial_id;
+
+            // Find an existing category (if any)
             $categoryfind = Category::find($testiId);
-            if($categoryfind){
-                if($categoryfind->categoryslug == null){
 
-                    $testi =  [
-                        'name' => $request->name,
-                        'display' => $request->display,
-                        'priority' => $request->priority,
-                        'categoryslug' => Str::slug($request->name, '-'),
-                        'status' => $request->status ?  '1' :  '0',
-                    ];
-                }
-                if($categoryfind->categoryslug != null){
+            // Construct the data array based on category existence
+            $testi = [
+                'name' => $request->name,
+                'display' => $request->display,
+                'priority' => $request->priority,
+                'status' => $request->status ? '1' : '0',
+            ];
 
-                    $testi =  [
-                        'name' => $request->name,
-                        'display' => $request->display,
-                        'priority' => $request->priority,
-                        'status' => $request->status ?  '1' :  '0',
-                    ];
+            if ($categoryfind) {
+                // If the category exists, check its slug
+                if ($categoryfind->categoryslug == null) {
+                    $testi['categoryslug'] = Str::slug($request->name, '-');
                 }
-            }
-            if(!$categoryfind){
-                $testi =  [
-                    'name' => $request->name,
-                    'display' => $request->display,
-                    'priority' => $request->priority,
-                    'categoryslug' => Str::slug($request->name, '-'),
-                    'status' => $request->status ?  '1' :  '0',
-                ];
+            } else {
+                // If the category does not exist, add the slug
+                $testi['categoryslug'] = Str::slug($request->name, '-');
             }
 
-
-
+            // Update or create the category
             $testimonial = Category::updateOrCreate(['id' => $testiId], $testi);
 
+            // Log success message
+            \Log::info('Category saved successfully: ' . json_encode($testimonial));
 
-            return response()->json(['code'=>200, 'success'=> lang('The category was successfully updated.', 'alerts'),'data' => $testimonial], 200);
-        }else{
-            return Response::json(['errors' => $validator->errors()]);
+            // Return success response
+            return response()->json(['code' => 200, 'success' => lang('The category was successfully updated.', 'alerts'), 'data' => $testimonial], 200);
+        } catch (\Exception $e) {
+            // Log error message
+            \Log::error('Error saving category: ' . $e->getMessage());
+
+            // Return error response
+            return response()->json(['error' => 'An error occurred while saving the category.'], 500);
         }
-
-
-
     }
+
 
     /**
      * Display the specified resource.
