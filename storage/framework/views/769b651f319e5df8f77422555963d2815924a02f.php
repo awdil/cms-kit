@@ -1,1 +1,0 @@
-<?php echo e(\Carbon\Carbon::now(Auth::user()->timezone)->format(setting('time_format'))); ?><?php /**PATH D:\xampp\htdocs\complaint-ticketing-system\resources\views/admin/superadmindashboard/timeupdate.blade.php ENDPATH**/ ?>

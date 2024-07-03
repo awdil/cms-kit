@@ -70,7 +70,7 @@ Route::middleware(ProtectAgainstSpam::class)->group(function() {
 					Route::get('/suspendedtickets', 'AdminDashboardController@suspendedtickets')->name('admin.suspendedtickets');
 					Route::get('notification/{id}', 'AdminDashboardController@Notificationview')->name('admin.notiication.view');
 					Route::get('/categories', 'CategoriesController@index')->name('categorys.index');
-					Route::post('/categories/create', 'CategoriesController@store');
+					Route::post('/categories/store', 'CategoriesController@store');
 					Route::get('/categories/{id}/edit', 'CategoriesController@show');
 					Route::get('/categories/status{id}', 'CategoriesController@status');
 					Route::get('/categoryassigned/{id}', 'CategoriesController@agentshow');

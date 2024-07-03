@@ -437,51 +437,105 @@
 		});
 
 		// Category form submit
+		// $('body').on('submit', '#testimonial_form', function (e) {
+		// 	e.preventDefault();
+		// 	var actionType = $('#btnsave').val();
+		// 	var fewSeconds = 2;
+		// 	$('#btnsave').html('Sending..');
+		// 	$('#btnsave').prop('disabled', true);
+		// 		setTimeout(function(){
+		// 			$('#btnsave').prop('disabled', false);
+		// 		}, fewSeconds*1000);
+		// 	var formData = new FormData(this);
+		// 	$.ajax({
+		// 		type:'POST',
+		// 		url: SITEURL + "/admin/categories/store",
+		// 		data: formData,
+		// 		cache:false,
+		// 		contentType: false,
+		// 		processData: false,
+		// 		success: (data) => {
+		// 			if(data.errors){
+		// 				$('#nameError').html('');
+		// 				$('#displayError').html('');
+		// 				$('#nameError').html(data.errors.name);
+		// 				$('#displayError').html(data.errors.display);
+		// 				$('#btnsave').html('{{lang('Save Changes')}}');
+
+		// 			}
+		// 			if(data.success)
+		// 			{
+		// 				$('#nameError').html('');
+		// 				$('#displayError').html('');
+		// 				$('#testimonial_form').trigger("reset");
+		// 				$('#addtestimonial').modal('hide');
+		// 				$('#btnsave').html('{{lang('Save Changes')}}');
+		// 				toastr.success(data.success);
+		// 				location.reload();
+		// 			}
+
+		// 		},
+		// 		error: function(data){
+		// 			console.log(data);
+		// 			toastr.error('{{lang('Category name already exists', 'alerts')}}');
+		// 			$('#btnsave').html('{{lang('Save Changes')}}');
+		// 		}
+		// 	});
+		// });
+
 		$('body').on('submit', '#testimonial_form', function (e) {
-			e.preventDefault();
-			var actionType = $('#btnsave').val();
-			var fewSeconds = 2;
-			$('#btnsave').html('Sending..');
-			$('#btnsave').prop('disabled', true);
-				setTimeout(function(){
-					$('#btnsave').prop('disabled', false);
-				}, fewSeconds*1000);
-			var formData = new FormData(this);
-			$.ajax({
-				type:'POST',
-				url: SITEURL + "/admin/categories/create",
-				data: formData,
-				cache:false,
-				contentType: false,
-				processData: false,
-				success: (data) => {
-					if(data.errors){
-						$('#nameError').html('');
-						$('#displayError').html('');
-						$('#nameError').html(data.errors.name);
-						$('#displayError').html(data.errors.display);
-						$('#btnsave').html('{{lang('Save Changes')}}');
+		e.preventDefault(); // Prevent default form submission
 
-					}
-					if(data.success)
-					{
-						$('#nameError').html('');
-						$('#displayError').html('');
-						$('#testimonial_form').trigger("reset");
-						$('#addtestimonial').modal('hide');
-						$('#btnsave').html('{{lang('Save Changes')}}');
-						toastr.success(data.success);
-						location.reload();
-					}
+		// Disable the button during the request
+		$('#btnsave').prop('disabled', true);
+		$('#btnsave').html('Sending...');
 
-				},
-				error: function(data){
-					console.log(data);
-					toastr.error('{{lang('Category name already exists', 'alerts')}}');
-					$('#btnsave').html('{{lang('Save Changes')}}');
+		// Create a FormData object from the form
+		var formData = new FormData(this);
+
+		// Make an AJAX POST request
+		$.ajax({
+			type: 'POST',
+			url: SITEURL + "/admin/categories/store",
+			data: formData,
+			cache: false,
+			contentType: false,
+			processData: false,
+			success: function (data) {
+				// Handle success response
+				if (data.errors) {
+					// Handle validation errors
+					$('#nameError').html(data.errors.name);
+					$('#displayError').html(data.errors.display);
+				} else if (data.success) {
+					// Clear any previous error messages
+					$('#nameError').html('');
+					$('#displayError').html('');
+
+					// Reset the form and close the modal
+					$('#testimonial_form').trigger("reset");
+					$('#addtestimonial').modal('hide');
+
+					// Show success message
+					toastr.success(data.success);
+
+					// Reload the page
+					location.reload();
 				}
-			});
+			},
+			error: function (data) {
+				// Handle server-side error
+				console.log(data);
+				toastr.error('An error occurred. Please try again later.');
+			},
+			complete: function () {
+				// Re-enable the button after the request completes
+				$('#btnsave').prop('disabled', false);
+				$('#btnsave').html('{{lang('Save Changes')}}');
+			}
 		});
+	});
+
 
 		// Assign group submit
 		$('body').on('submit', '#group_form', function (e) {
