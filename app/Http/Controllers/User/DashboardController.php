@@ -60,7 +60,7 @@ class DashboardController extends Controller
 
 
    public function notify(){
-
+        //notify
         $title = Apptitle::first();
         $data['title'] = $title;
 
