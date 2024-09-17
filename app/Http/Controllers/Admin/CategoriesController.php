@@ -80,6 +80,7 @@ class CategoriesController extends Controller
      */
     public function store(Request $request)
     {
+       // dd($request);
         try {
             // Validate the incoming request data
             $validator = Validator::make($request->all(), [

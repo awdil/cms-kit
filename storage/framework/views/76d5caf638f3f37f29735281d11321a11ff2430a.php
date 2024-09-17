@@ -11,121 +11,121 @@
 
 <?php $__env->startSection('content'); ?>
 
-							<!--Page header-->
-							<div class="page-header d-xl-flex d-block">
-								<div class="page-leftheader">
-									<h4 class="page-title"><span class="font-weight-normal text-muted ms-2"><?php echo e(lang('Department', 'menu')); ?></span></h4>
-								</div>
-							</div>
-							<!--End Page header-->
+		<!--Page header-->
+		<div class="page-header d-xl-flex d-block">
+			<div class="page-leftheader">
+				<h4 class="page-title"><span class="font-weight-normal text-muted ms-2"><?php echo e(lang('Department', 'menu')); ?></span></h4>
+			</div>
+		</div>
+		<!--End Page header-->
 
-							<div class="col-xl-12 col-lg-12 col-md-12">
-								<div class="card ">
-									<div class="card-header border-0 d-sm-max-flex">
-										<h4 class="card-title"><?php echo e(lang('Department', 'menu')); ?></h4>
-										<div class="card-options mt-sm-max-2">
-											<?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('Department Create')): ?>
+		<div class="col-xl-12 col-lg-12 col-md-12">
+			<div class="card ">
+				<div class="card-header border-0 d-sm-max-flex">
+					<h4 class="card-title"><?php echo e(lang('Department', 'menu')); ?></h4>
+					<div class="card-options mt-sm-max-2">
+						<?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('Department Create')): ?>
 
-											<a href="javascript:void(0)" class="btn btn-secondary me-3" id="create-new-department" onclick="adddepartment()"><?php echo e(lang('Add Department')); ?></a>
+						<a href="javascript:void(0)" class="btn btn-secondary me-3" id="create-new-department" onclick="adddepartment()"><?php echo e(lang('Add Department')); ?></a>
+						<?php endif; ?>
+
+					</div>
+				</div>
+				<div class="card-body" >
+					<div class="table-responsive spruko-delete">
+						<?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('Department Delete')): ?>
+
+						<button id="massdeletenotify" class="btn btn-outline-light btn-sm mb-4 data-table-btn"><i class="fe fe-trash"></i> <?php echo e(lang('Delete')); ?></button>
+						<?php endif; ?>
+
+						<table class="table table-bordered border-bottom text-nowrap ticketdeleterow w-100" id="support-articlelists">
+							<thead>
+								<tr>
+									<th  width="10"><?php echo e(lang('Sl.No')); ?></th>
+									<?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('Department Delete')): ?>
+
+									<th width="10" >
+										<input type="checkbox"  id="customCheckAll">
+										<label  for="customCheckAll"></label>
+									</th>
+									<?php endif; ?>
+									<?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->denies('Department Delete')): ?>
+
+									<th width="10" >
+										<input type="checkbox"  id="customCheckAll" disabled>
+										<label  for="customCheckAll"></label>
+									</th>
+									<?php endif; ?>
+
+									<th ><?php echo e(lang('Department name')); ?></th>
+									<th class="w-5"><?php echo e(lang('Status')); ?></th>
+									<th class="w-5"><?php echo e(lang('Actions')); ?></th>
+								</tr>
+							</thead>
+							<tbody>
+								<?php $i = 1; ?>
+									<?php $__currentLoopData = $departments; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $department): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+									<tr>
+										<td><?php echo e($i++); ?></td>
+										<td>
+											<?php if(Auth::user()->can('Department Delete')): ?>
+												<input type="checkbox" name="spruko_checkbox[]" class="checkall" value="<?php echo e($department->id); ?>" />
+											<?php else: ?>
+												<input type="checkbox" name="spruko_checkbox[]" class="checkall" value="<?php echo e($department->id); ?>" disabled />
 											<?php endif; ?>
+										</td>
+										<td><?php echo e(Str::limit($department->departmentname)); ?></td>
+										<td>
+											<?php if(Auth::user()->can('Department Edit')): ?>
+												<?php if($department->status == '1'): ?>
 
-										</div>
-									</div>
-									<div class="card-body" >
-										<div class="table-responsive spruko-delete">
-											<?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('Department Delete')): ?>
+													<label class="custom-switch form-switch mb-0">
+														<input type="checkbox" name="status" data-id="<?php echo e($department->id); ?>" id="myonoffswitch<?php echo e($department->id); ?>" value="1" class="custom-switch-input tswitch" checked>
+														<span class="custom-switch-indicator"></span>
+													</label>
+												<?php else: ?>
 
-											<button id="massdeletenotify" class="btn btn-outline-light btn-sm mb-4 data-table-btn"><i class="fe fe-trash"></i> <?php echo e(lang('Delete')); ?></button>
+													<label class="custom-switch form-switch mb-0">
+														<input type="checkbox" name="status" data-id="<?php echo e($department->id); ?>" id="myonoffswitch<?php echo e($department->id); ?>" value="1" class="custom-switch-input tswitch">
+														<span class="custom-switch-indicator"></span>
+													</label>
+												<?php endif; ?>
+											<?php else: ?>
+												~
 											<?php endif; ?>
+										</td>
+										<td>
+											<div class = "d-flex">
+												<?php if(Auth::user()->can('Department Edit')): ?>
 
-											<table class="table table-bordered border-bottom text-nowrap ticketdeleterow w-100" id="support-articlelists">
-												<thead>
-													<tr>
-														<th  width="10"><?php echo e(lang('Sl.No')); ?></th>
-														<?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('Department Delete')): ?>
+													<a href="javascript:void(0)" data-id="<?php echo e($department->id); ?>" onclick="editdepartment(event.target)" class="action-btns1">
+														<i class="feather feather-edit text-primary" data-id="<?php echo e($department->id); ?> " data-bs-toggle="tooltip" data-bs-placement="top" title="<?php echo e(lang('Edit')); ?>"></i>
+													</a>
+												<?php else: ?>
+													~
+												<?php endif; ?>
+												<?php if(Auth::user()->can('Department Delete')): ?>
+													<a href="javascript:void(0)" data-id="<?php echo e($department->id); ?>" class="action-btns1"  onclick="deletedepartment(event.target)">
+														<i class="feather feather-trash-2 text-danger" data-id="<?php echo e($department->id); ?> " data-bs-toggle="tooltip" data-bs-placement="top" title="<?php echo e(lang('Delete')); ?>"></i>
+													</a>
+												<?php else: ?>
+													~
+												<?php endif; ?>
 
-														<th width="10" >
-															<input type="checkbox"  id="customCheckAll">
-															<label  for="customCheckAll"></label>
-														</th>
-														<?php endif; ?>
-														<?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->denies('Department Delete')): ?>
-
-														<th width="10" >
-															<input type="checkbox"  id="customCheckAll" disabled>
-															<label  for="customCheckAll"></label>
-														</th>
-														<?php endif; ?>
-
-														<th ><?php echo e(lang('Department name')); ?></th>
-														<th class="w-5"><?php echo e(lang('Status')); ?></th>
-														<th class="w-5"><?php echo e(lang('Actions')); ?></th>
-													</tr>
-												</thead>
-												<tbody>
-													<?php $i = 1; ?>
-													 <?php $__currentLoopData = $departments; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $department): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-														<tr>
-															<td><?php echo e($i++); ?></td>
-															<td>
-																<?php if(Auth::user()->can('Department Delete')): ?>
-																	<input type="checkbox" name="spruko_checkbox[]" class="checkall" value="<?php echo e($department->id); ?>" />
-																<?php else: ?>
-																	<input type="checkbox" name="spruko_checkbox[]" class="checkall" value="<?php echo e($department->id); ?>" disabled />
-																<?php endif; ?>
-															</td>
-															<td><?php echo e(Str::limit($department->departmentname)); ?></td>
-															<td>
-																<?php if(Auth::user()->can('Department Edit')): ?>
-																	<?php if($department->status == '1'): ?>
-
-																		<label class="custom-switch form-switch mb-0">
-																			<input type="checkbox" name="status" data-id="<?php echo e($department->id); ?>" id="myonoffswitch<?php echo e($department->id); ?>" value="1" class="custom-switch-input tswitch" checked>
-																			<span class="custom-switch-indicator"></span>
-																		</label>
-																	<?php else: ?>
-
-																		<label class="custom-switch form-switch mb-0">
-																			<input type="checkbox" name="status" data-id="<?php echo e($department->id); ?>" id="myonoffswitch<?php echo e($department->id); ?>" value="1" class="custom-switch-input tswitch">
-																			<span class="custom-switch-indicator"></span>
-																		</label>
-																	<?php endif; ?>
-																<?php else: ?>
-																	~
-																<?php endif; ?>
-															</td>
-															<td>
-																<div class = "d-flex">
-																	<?php if(Auth::user()->can('Department Edit')): ?>
-
-																		<a href="javascript:void(0)" data-id="<?php echo e($department->id); ?>" onclick="editdepartment(event.target)" class="action-btns1">
-																			<i class="feather feather-edit text-primary" data-id="<?php echo e($department->id); ?> " data-bs-toggle="tooltip" data-bs-placement="top" title="<?php echo e(lang('Edit')); ?>"></i>
-																		</a>
-																	<?php else: ?>
-																		~
-																	<?php endif; ?>
-																	<?php if(Auth::user()->can('Department Delete')): ?>
-																		<a href="javascript:void(0)" data-id="<?php echo e($department->id); ?>" class="action-btns1"  onclick="deletedepartment(event.target)">
-																			<i class="feather feather-trash-2 text-danger" data-id="<?php echo e($department->id); ?> " data-bs-toggle="tooltip" data-bs-placement="top" title="<?php echo e(lang('Delete')); ?>"></i>
-																		</a>
-																	<?php else: ?>
-																		~
-																	<?php endif; ?>
-
-																</div>
-															</td>
-														</tr>
-													<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-												</tbody>
-											</table>
-										</div>
-									</div>
-								</div>
-							</div>
-							<?php $__env->stopSection(); ?>
+											</div>
+										</td>
+									</tr>
+								<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+		<?php $__env->stopSection(); ?>
 
 
-                            <?php $__env->startSection('scripts'); ?>
+		<?php $__env->startSection('scripts'); ?>
 
 		<!-- INTERNAL Vertical-scroll js-->
 		<script src="<?php echo e(asset('assets/plugins/vertical-scroll/jquery.bootstrap.newsbox.js')); ?>"></script>
@@ -349,6 +349,7 @@
 
 			// create the department
             function createdepartment() {
+				console.log('testing fodf');
 				$('#departmentnameError').text('');
                 $('#answerError').text('');
                 var departmentname = $('#departmentname').val();

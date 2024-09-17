@@ -13,121 +13,121 @@
 
 @section('content')
 
-							<!--Page header-->
-							<div class="page-header d-xl-flex d-block">
-								<div class="page-leftheader">
-									<h4 class="page-title"><span class="font-weight-normal text-muted ms-2">{{lang('Department', 'menu')}}</span></h4>
-								</div>
-							</div>
-							<!--End Page header-->
+		<!--Page header-->
+		<div class="page-header d-xl-flex d-block">
+			<div class="page-leftheader">
+				<h4 class="page-title"><span class="font-weight-normal text-muted ms-2">{{lang('Department', 'menu')}}</span></h4>
+			</div>
+		</div>
+		<!--End Page header-->
 
-							<div class="col-xl-12 col-lg-12 col-md-12">
-								<div class="card ">
-									<div class="card-header border-0 d-sm-max-flex">
-										<h4 class="card-title">{{lang('Department', 'menu')}}</h4>
-										<div class="card-options mt-sm-max-2">
-											@can('Department Create')
+		<div class="col-xl-12 col-lg-12 col-md-12">
+			<div class="card ">
+				<div class="card-header border-0 d-sm-max-flex">
+					<h4 class="card-title">{{lang('Department', 'menu')}}</h4>
+					<div class="card-options mt-sm-max-2">
+						@can('Department Create')
 
-											<a href="javascript:void(0)" class="btn btn-secondary me-3" id="create-new-department" onclick="adddepartment()">{{lang('Add Department')}}</a>
-											@endcan
+						<a href="javascript:void(0)" class="btn btn-secondary me-3" id="create-new-department" onclick="adddepartment()">{{lang('Add Department')}}</a>
+						@endcan
 
-										</div>
-									</div>
-									<div class="card-body" >
-										<div class="table-responsive spruko-delete">
-											@can('Department Delete')
+					</div>
+				</div>
+				<div class="card-body" >
+					<div class="table-responsive spruko-delete">
+						@can('Department Delete')
 
-											<button id="massdeletenotify" class="btn btn-outline-light btn-sm mb-4 data-table-btn"><i class="fe fe-trash"></i> {{lang('Delete')}}</button>
-											@endcan
+						<button id="massdeletenotify" class="btn btn-outline-light btn-sm mb-4 data-table-btn"><i class="fe fe-trash"></i> {{lang('Delete')}}</button>
+						@endcan
 
-											<table class="table table-bordered border-bottom text-nowrap ticketdeleterow w-100" id="support-articlelists">
-												<thead>
-													<tr>
-														<th  width="10">{{lang('Sl.No')}}</th>
-														@can('Department Delete')
+						<table class="table table-bordered border-bottom text-nowrap ticketdeleterow w-100" id="support-articlelists">
+							<thead>
+								<tr>
+									<th  width="10">{{lang('Sl.No')}}</th>
+									@can('Department Delete')
 
-														<th width="10" >
-															<input type="checkbox"  id="customCheckAll">
-															<label  for="customCheckAll"></label>
-														</th>
-														@endcan
-														@cannot('Department Delete')
+									<th width="10" >
+										<input type="checkbox"  id="customCheckAll">
+										<label  for="customCheckAll"></label>
+									</th>
+									@endcan
+									@cannot('Department Delete')
 
-														<th width="10" >
-															<input type="checkbox"  id="customCheckAll" disabled>
-															<label  for="customCheckAll"></label>
-														</th>
-														@endcannot
+									<th width="10" >
+										<input type="checkbox"  id="customCheckAll" disabled>
+										<label  for="customCheckAll"></label>
+									</th>
+									@endcannot
 
-														<th >{{lang('Department name')}}</th>
-														<th class="w-5">{{lang('Status')}}</th>
-														<th class="w-5">{{lang('Actions')}}</th>
-													</tr>
-												</thead>
-												<tbody>
-													@php $i = 1; @endphp
-													 @foreach($departments as $department)
-														<tr>
-															<td>{{$i++}}</td>
-															<td>
-																@if(Auth::user()->can('Department Delete'))
-																	<input type="checkbox" name="spruko_checkbox[]" class="checkall" value="{{$department->id}}" />
-																@else
-																	<input type="checkbox" name="spruko_checkbox[]" class="checkall" value="{{$department->id}}" disabled />
-																@endif
-															</td>
-															<td>{{Str::limit($department->departmentname)}}</td>
-															<td>
-																@if(Auth::user()->can('Department Edit'))
-																	@if($department->status == '1')
+									<th >{{lang('Department name')}}</th>
+									<th class="w-5">{{lang('Status')}}</th>
+									<th class="w-5">{{lang('Actions')}}</th>
+								</tr>
+							</thead>
+							<tbody>
+								@php $i = 1; @endphp
+									@foreach($departments as $department)
+									<tr>
+										<td>{{$i++}}</td>
+										<td>
+											@if(Auth::user()->can('Department Delete'))
+												<input type="checkbox" name="spruko_checkbox[]" class="checkall" value="{{$department->id}}" />
+											@else
+												<input type="checkbox" name="spruko_checkbox[]" class="checkall" value="{{$department->id}}" disabled />
+											@endif
+										</td>
+										<td>{{Str::limit($department->departmentname)}}</td>
+										<td>
+											@if(Auth::user()->can('Department Edit'))
+												@if($department->status == '1')
 
-																		<label class="custom-switch form-switch mb-0">
-																			<input type="checkbox" name="status" data-id="{{$department->id}}" id="myonoffswitch{{$department->id}}" value="1" class="custom-switch-input tswitch" checked>
-																			<span class="custom-switch-indicator"></span>
-																		</label>
-																	@else
+													<label class="custom-switch form-switch mb-0">
+														<input type="checkbox" name="status" data-id="{{$department->id}}" id="myonoffswitch{{$department->id}}" value="1" class="custom-switch-input tswitch" checked>
+														<span class="custom-switch-indicator"></span>
+													</label>
+												@else
 
-																		<label class="custom-switch form-switch mb-0">
-																			<input type="checkbox" name="status" data-id="{{$department->id}}" id="myonoffswitch{{$department->id}}" value="1" class="custom-switch-input tswitch">
-																			<span class="custom-switch-indicator"></span>
-																		</label>
-																	@endif
-																@else
-																	~
-																@endif
-															</td>
-															<td>
-																<div class = "d-flex">
-																	@if(Auth::user()->can('Department Edit'))
+													<label class="custom-switch form-switch mb-0">
+														<input type="checkbox" name="status" data-id="{{$department->id}}" id="myonoffswitch{{$department->id}}" value="1" class="custom-switch-input tswitch">
+														<span class="custom-switch-indicator"></span>
+													</label>
+												@endif
+											@else
+												~
+											@endif
+										</td>
+										<td>
+											<div class = "d-flex">
+												@if(Auth::user()->can('Department Edit'))
 
-																		<a href="javascript:void(0)" data-id="{{$department->id}}" onclick="editdepartment(event.target)" class="action-btns1">
-																			<i class="feather feather-edit text-primary" data-id="{{$department->id}} " data-bs-toggle="tooltip" data-bs-placement="top" title="{{lang('Edit')}}"></i>
-																		</a>
-																	@else
-																		~
-																	@endif
-																	@if(Auth::user()->can('Department Delete'))
-																		<a href="javascript:void(0)" data-id="{{$department->id}}" class="action-btns1"  onclick="deletedepartment(event.target)">
-																			<i class="feather feather-trash-2 text-danger" data-id="{{$department->id}} " data-bs-toggle="tooltip" data-bs-placement="top" title="{{lang('Delete')}}"></i>
-																		</a>
-																	@else
-																		~
-																	@endif
+													<a href="javascript:void(0)" data-id="{{$department->id}}" onclick="editdepartment(event.target)" class="action-btns1">
+														<i class="feather feather-edit text-primary" data-id="{{$department->id}} " data-bs-toggle="tooltip" data-bs-placement="top" title="{{lang('Edit')}}"></i>
+													</a>
+												@else
+													~
+												@endif
+												@if(Auth::user()->can('Department Delete'))
+													<a href="javascript:void(0)" data-id="{{$department->id}}" class="action-btns1"  onclick="deletedepartment(event.target)">
+														<i class="feather feather-trash-2 text-danger" data-id="{{$department->id}} " data-bs-toggle="tooltip" data-bs-placement="top" title="{{lang('Delete')}}"></i>
+													</a>
+												@else
+													~
+												@endif
 
-																</div>
-															</td>
-														</tr>
-													@endforeach
-												</tbody>
-											</table>
-										</div>
-									</div>
-								</div>
-							</div>
-							@endsection
+											</div>
+										</td>
+									</tr>
+								@endforeach
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+		@endsection
 
 
-                            @section('scripts')
+		@section('scripts')
 
 		<!-- INTERNAL Vertical-scroll js-->
 		<script src="{{asset('assets/plugins/vertical-scroll/jquery.bootstrap.newsbox.js')}}"></script>
@@ -351,6 +351,7 @@
 
 			// create the department
             function createdepartment() {
+				console.log('testing fodf');
 				$('#departmentnameError').text('');
                 $('#answerError').text('');
                 var departmentname = $('#departmentname').val();

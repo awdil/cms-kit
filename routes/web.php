@@ -394,6 +394,7 @@ Route::middleware(ProtectAgainstSpam::class)->group(function() {
 
 						Route::get('/', 'DepartmentController@index')->name('index');
 						Route::post('create', 'DepartmentController@create')->name('create');
+						Route::post('store', 'DepartmentController@store')->name('store');
 						Route::get('edit/{id}', 'DepartmentController@edit')->name('edit');
 						Route::delete('delete/{id}', 'DepartmentController@delete')->name('delete');
 						Route::post('deleteall', 'DepartmentController@deleteall')->name('deleteall');

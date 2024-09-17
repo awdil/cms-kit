@@ -10,6 +10,7 @@ use App\Models\Apptitle;
 use App\Models\Footertext;
 use App\Models\Seosetting;
 use App\Models\Pages;
+use Illuminate\Support\Facades\DB;
 
 class DepartmentController extends Controller
 {
@@ -37,7 +38,7 @@ class DepartmentController extends Controller
     }
 
 
-    public function create(Request $request)
+    public function create90(Request $request)
     {
         $validate = Department::find($request->id);
         if(!$validate){
@@ -72,6 +73,49 @@ class DepartmentController extends Controller
           $department = Department::updateOrCreate( ['id' => $request->id], ['departmentname' => $request->departmentname, 'status' => $request->status ]);
 
           return response()->json(['code'=>200, 'success'=> lang('The Department has been successfully updated.', 'alerts'),'data' => $department], 200);
+    }
+
+    public function create(Request $request)
+    {
+
+        $validate = DB::table('departments')->find($request->id);
+        //dd($validate);
+        if(!$validate) {
+            $request->validate([
+                'departmentname'=> 'required|max:255|unique:departments',
+            ]);
+        }
+        // dd($validate);
+        // if($validate) {
+        //     if($request->departmentname == $validate->departmentname) {
+        //         $request->validate([
+        //             'departmentname'=> 'required|max:255',
+        //         ]);
+        //     } else {
+        //         $request->validate([
+        //             'departmentname'=> 'required|max:255|unique:departments',
+        //         ]);
+        //     }
+        // }
+        
+        if ($validate) {
+            // Update existing department
+            DB::table('departments')->where('id', $request->id)->update([
+                'departmentname' => $request->departmentname,
+                'status' => $request->status,
+            ]);
+        } else {
+            // Insert new department
+            DB::table('departments')->insert([
+                'id' => $request->id,
+                'departmentname' => $request->departmentname,
+                'status' => $request->status,
+            ]);
+        }
+        
+        $department = DB::table('departments')->where('id', $request->id)->first();
+
+        return response()->json(['code' => 200, 'success' => 'The Department has been successfully updated.', 'data' => $department], 200);
     }
 
     public function edit($id)
